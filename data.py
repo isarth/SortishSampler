@@ -13,11 +13,13 @@ class text_dataset(Dataset):
     return len(self.x)
   def __getitem__(self,i):
     return (self.x[i],self.y[i])
+
 class SortSampler(Sampler):
     def __init__(self, data_source, key): self.data_source,self.key = data_source,key
     def __len__(self): return len(self.data_source)
     def __iter__(self):
         return iter(sorted(range(len(self.data_source)), key=self.key, reverse=True))
+
 class SortishSampler(Sampler):
     """Returns an iterator that traverses the the data in randomly ordered batches that are approximately the same size.
     The max key size batch is always returned in the first call because of pytorch cuda memory allocation sequencing.
@@ -41,6 +43,7 @@ class SortishSampler(Sampler):
         sort_idx = np.concatenate(np.random.permutation(ck_idx[1:]))
         sort_idx = np.concatenate((ck_idx[0], sort_idx))
         return iter(sort_idx)
+
 class DataLoader(object):
     def __init__(self,dataset, batch_size=1, shuffle=False, batch_sampler=None,
     	sampler=None,pad_idx=0, drop_last=False):
@@ -56,7 +59,6 @@ class DataLoader(object):
     def __len__(self):
         return len(self.dataset)
     
-
     def jag_stack(self, b): 
         if len(b)==1: return np.array(b[0][0]),np.array([b[0][1]])
         b = np.stack(b)
