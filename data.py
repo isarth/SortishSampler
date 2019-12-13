@@ -72,7 +72,6 @@ class DataLoader(object):
 
     def get_batch(self, indices):
         xb,yb = self.jag_stack([self.dataset[i] for i in indices])
-
         return xb,yb
     
     def __iter__(self):
